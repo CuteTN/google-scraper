@@ -1,3 +1,5 @@
+import { EnvProvider } from "../env-provider/env-provider";
+
 /**
  * This class abstracts away the logging logics
  */
@@ -7,7 +9,7 @@ export class Logger {
    * @param contents
    */
   static log(...contents: any[]) {
-    if (process.env.ENABLED_DEBUG_LOG == "true") {
+    if (EnvProvider.getVar("ENABLED_DEBUG_LOG") == "true") {
       console.log("[LOG]", ...contents);
     }
   }

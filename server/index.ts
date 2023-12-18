@@ -1,28 +1,23 @@
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { Logger } from "./src/common/logger/logger";
-import { infoMiddleware } from "./src/common/middlewares/info-middleware";
-
-dotenv.config();
+import { infoMiddleware } from "./src/middlewares/info.middleware";
+import { UsersController } from "./src/controllers/users.controller";
+import { EnvProvider } from "./src/common/env-provider/env-provider";
 
 const app: Express = express();
-const port = process.env.PORT;
+const port = EnvProvider.getVar("PORT");
 
-var jsonParser = bodyParser.json()
+var jsonParser = bodyParser.json();
 app.use(jsonParser, cors(), infoMiddleware);
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_req: Request, res: Response) => {
   res.send("Hi! I'm Quản Tiến Nghĩa. Welcome to my Google scraper server.");
 });
 
-app.get("/v1/test-endpoint", (req,res) => {
-  res.status(200).send({ ok: "very ok" })
-});
+app.use("/v1/users", new UsersController().createRouter());
 
 app.listen(port, () => {
-  Logger.info(
-    `️[server]: The Dog-Express-TS server is running at http://localhost:${port}`
-  );
+  Logger.info(`️[server]: The Server is running at http://localhost:${port}`);
 });

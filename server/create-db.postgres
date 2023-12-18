@@ -1,0 +1,14 @@
+create table if not exists app_user (
+  id varchar(45) not null primary key,
+  username varchar(100) not null,
+  hashed_password varchar(100) not null
+)
+
+create table if not exists app_search_result (
+  id varchar(45) not null primary key,
+  keyword varchar(200) not null,
+  adwords_count smallint,
+  links_count smallint,
+  results_count integer,
+  html varchar
+)

@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { Logger } from "../logger/logger";
+import { Logger } from "../common/logger/logger";
 
 /**
  * logging API information 
