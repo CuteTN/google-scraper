@@ -5,6 +5,7 @@ import { Logger } from "./src/common/logger/logger";
 import { infoMiddleware } from "./src/middlewares/info.middleware";
 import { UsersController } from "./src/controllers/users.controller";
 import { EnvProvider } from "./src/common/env-provider/env-provider";
+import { SearchResultsController } from "./src/controllers/search-results.controller";
 
 const app: Express = express();
 const port = EnvProvider.getVar("PORT");
@@ -17,6 +18,7 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 app.use("/v1/users", new UsersController().createRouter());
+app.use("/v1/search-results", new SearchResultsController().createRouter());
 
 app.listen(port, () => {
   Logger.info(`️[server]: The Server is running at http://localhost:${port}`);

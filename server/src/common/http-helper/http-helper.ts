@@ -7,6 +7,7 @@ export type HttpRequestConfig = {
   headers?: {
     "x-api-key"?: string;
     "Content-Type"?: "multipart/form-data" | "application/json",
+    "User-Agent"?: string;
   };
   data?: any;
 };
