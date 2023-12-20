@@ -1,6 +1,6 @@
 import events from "events";
 
-const ACCESS_TOKEN_STORAGE_KEY = "gs-access-token"
+const ACCESS_TOKEN_STORAGE_KEY = "gs-access-token";
 
 export class TokenService {
   private static accessTokenChangeEventEmitter = new events.EventEmitter();
@@ -8,12 +8,12 @@ export class TokenService {
   static onAccessTokenChange = (listener: (newToken: string) => any) => {
     this.accessTokenChangeEventEmitter.on("", listener);
     return listener;
-  }
+  };
 
   static offAccessTokenChange = (listener: (newToken: string) => any) => {
     this.accessTokenChangeEventEmitter.off("", listener);
     return listener;
-  }
+  };
 
   static get accessToken() {
     return localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY) ?? "";
@@ -24,13 +24,14 @@ export class TokenService {
 
     if (!token) {
       localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
-      if (currentToken)
+      if (currentToken) {
         this.accessTokenChangeEventEmitter.emit("", "");
-    }
-    else {
+      }
+    } else {
       localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, token);
-      if (currentToken !== token)
+      if (currentToken !== token) {
         this.accessTokenChangeEventEmitter.emit("", token);
+      }
     }
-  } 
+  }
 }

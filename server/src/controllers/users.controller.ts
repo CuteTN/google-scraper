@@ -89,13 +89,10 @@ export class UsersController implements IController {
           userId: user.id,
           username: user.username,
         },
-        // TODO: Set it longer
-        { expiresIn: "10min" }
+        { expiresIn: "1h" }
       );
 
-      const userResponse = user as Partial<typeof user>;
-      delete userResponse.hashedPassword;
-      return res.status(200).send({ accessToken, user: userResponse });
+      return res.status(200).send({ accessToken });
     } catch (e) {
       Logger.error(e);
       return res.sendStatus(500);

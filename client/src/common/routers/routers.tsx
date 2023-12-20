@@ -1,12 +1,17 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { HomePage } from "../../pages/Home/Home.page";
-import { SignInPage } from "../../pages/SignIn/SignIn.page";
-import { SignUpPage } from "../../pages/SignUp/SignUp.page";
+import { HomePage } from "../../pages/HomePage/Home.page";
+import { SignInPage } from "../../pages/AuthPages/SignIn.page";
+import { SignUpPage } from "../../pages/AuthPages/SignUp.page";
+import { PageGuard } from "../authentication/PageGuard.component";
 
 export const ROUTES = {
   home: {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <PageGuard>
+        <HomePage />
+      </PageGuard>
+    ),
   },
   signIn: {
     path: "/sign-in",

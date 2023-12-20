@@ -9,7 +9,7 @@ export type HttpRequestConfig = {
 };
 
 export type HttpRequestInterceptorParam = {
-  header: {
+  headers: {
     Authorization: string;
   };
 };

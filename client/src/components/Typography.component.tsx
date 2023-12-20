@@ -9,6 +9,8 @@ export function Typography({
   ellipsis = false,
   tooltip,
   tooltipPlacement,
+  color,
+  fontWeight,
 }: {
   className?: string;
   children?: React.ReactNode;
@@ -28,11 +30,13 @@ export function Typography({
     | "body2";
   ellipsis?: boolean;
   tooltip?: string;
-  tooltipPlacement?: TooltipPlacement
+  tooltipPlacement?: TooltipPlacement;
+  color?: string;
+  fontWeight?: string | number;
 }) {
   return (
     <Tooltip title={tooltip} placement={tooltipPlacement}>
-      <MuiTypography className={className} variant={variant} noWrap={ellipsis}>
+      <MuiTypography className={className} variant={variant} noWrap={ellipsis} color={color} fontWeight={fontWeight}>
         {children}
       </MuiTypography>
     </Tooltip>

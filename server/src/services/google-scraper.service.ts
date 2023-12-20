@@ -100,6 +100,7 @@ export class GoogleScraper {
       adwordsCount: 0,
       linksCount: 0,
       resultsCount: 0,
+      pending: false,
     };
 
     result.resultsCount = this.extractResultsCount(dom);

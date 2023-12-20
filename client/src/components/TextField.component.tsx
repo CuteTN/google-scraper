@@ -3,16 +3,22 @@ import MuiTextField from "@mui/material/TextField";
 
 export function TextField({
   className,
+  name,
   label,
+  placeholder,
   value,
   onChange,
   required = false,
+  type = "text",
 }: {
   className?: string;
+  name?: string;
   label?: string;
   value?: string;
+  placeholder?: string;
   onChange?: (value: string) => any;
   required?: boolean;
+  type?: React.HTMLInputTypeAttribute
 }) {
   const textFieldId = React.useId();
 
@@ -23,17 +29,23 @@ export function TextField({
     [onChange]
   );
 
-  const textFieldError = React.useMemo(() => required && !value, [required, value]);
+  const textFieldError = React.useMemo(
+    () => required && !value,
+    [required, value]
+  );
 
   return (
     <MuiTextField
       id={textFieldId}
+      name={name}
       className={className}
       label={label}
       value={value}
       onChange={handleChange}
       required={required}
       error={textFieldError}
+      placeholder={placeholder}
+      type={type}
     />
   );
 }

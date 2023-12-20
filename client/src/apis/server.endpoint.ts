@@ -7,7 +7,7 @@ export const serverEndPoint = new HttpHelper(SERVER_URL);
 serverEndPoint.setRequestInterceptor((params) => {
   let token = TokenService.accessToken;
   if (token) {
-    params.header.Authorization = `bearer ${token}`;
+    params.headers.Authorization = `bearer ${token}`;
   }
 
   return params;

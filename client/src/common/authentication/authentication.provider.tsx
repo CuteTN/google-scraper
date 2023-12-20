@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { TypeUser } from "../../models/users.model";
 import { signInApi } from "../../apis/authentication.apis";
 import { TokenService } from "./token.service";
+import { jwtDecode } from "jwt-decode";
 
 const AuthenticationContext = React.createContext<{
   isSignedIn: boolean;
@@ -10,35 +11,58 @@ const AuthenticationContext = React.createContext<{
   signedInErrorMessage?: string;
 }>(undefined as any);
 
+function decodeUserFromToken(token: string): TypeUser | null {
+  if (!token) return null;
+
+  try {
+    const payload = jwtDecode(token);
+
+    return {
+      id: (payload as any).userId,
+      username: (payload as any).username,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export function AuthenticationProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = React.useState<TypeUser | null>(null);
-  const [signedInErrorMessage, setSignedInErrorMessage] = React.useState<string | undefined>();
+  const [user, setUser] = React.useState<TypeUser | null>(
+    decodeUserFromToken(TokenService.accessToken)
+  );
+  const [signedInErrorMessage, setSignedInErrorMessage] = React.useState<
+    string | undefined
+  >();
 
   useEffect(() => {
     const listener = TokenService.onAccessTokenChange((newToken) => {
-      if (!newToken) setUser(null);
-    })
+      if (newToken) setUser(decodeUserFromToken(newToken));
+    });
 
     return () => {
       TokenService.offAccessTokenChange(listener);
-    }
+    };
   }, []);
 
-  const signIn = React.useCallback(async (username: string, password: string) => {
-    try {
-      const res = await signInApi(username, password);
-      setUser(res.data.user);
-      TokenService.accessToken = res.data.accessToken;
-      setSignedInErrorMessage(undefined);
-    }
-    catch (error: any) {
-      setSignedInErrorMessage(error?.response?.message ?? "Unknown error.");
-    }
-  }, []);
+  const signIn = React.useCallback(
+    async (username: string, password: string) => {
+      try {
+        const res = await signInApi(username, password);
+        const token = res.data.accessToken;
+        TokenService.accessToken = token;
+
+        setSignedInErrorMessage(undefined);
+      } catch (error: any) {
+        setSignedInErrorMessage(error?.response?.message ?? "Unknown error.");
+        throw error;
+      }
+    },
+    []
+  );
 
   const contextValue = React.useMemo(() => {
     return {
@@ -46,10 +70,16 @@ export function AuthenticationProvider({
       signIn,
       signedInErrorMessage,
       isSignedIn: !!user,
-    }
+    };
   }, [user, signIn, signedInErrorMessage]);
 
-  return <AuthenticationContext.Provider value={contextValue}>
-    {children}
-  </AuthenticationContext.Provider>
+  return (
+    <AuthenticationContext.Provider value={contextValue}>
+      {children}
+    </AuthenticationContext.Provider>
+  );
+}
+
+export function useAuth() {
+  return React.useContext(AuthenticationContext);
 }

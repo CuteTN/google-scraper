@@ -1,10 +1,10 @@
 import { LightModeIcon } from "../../../components/Icons.components";
 import { AppThemeOptions } from "./AppTheme.model";
-import { pink ,grey, common } from "@mui/material/colors"
+import { pink, grey, common, red } from "@mui/material/colors";
 
 export const lightTheme: AppThemeOptions = {
   id: "light-theme",
-  nameGetter: fm => fm("common.lightTheme"),
+  nameGetter: (fm) => fm("common.lightTheme"),
   iconRenderer: () => <LightModeIcon />,
   themeOptions: {
     palette: {
@@ -17,13 +17,16 @@ export const lightTheme: AppThemeOptions = {
         dark: pink[300],
       },
       secondary: {
-        main: pink[100],
-        dark: pink[200],
+        main: pink[400],
+        dark: pink[500],
       },
       text: {
         primary: common.black,
         secondary: grey[600],
       },
-    }
-  }
-}
+      error: {
+        main: red[500],
+      }
+    },
+  },
+};

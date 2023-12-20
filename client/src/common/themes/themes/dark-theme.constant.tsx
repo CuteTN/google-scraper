@@ -13,12 +13,12 @@ export const darkTheme: AppThemeOptions = {
         paper: grey[700],
       },
       primary: {
-        main: pink[500],
-        dark: pink[600],
+        main: pink[200],
+        dark: pink[300],
       },
       secondary: {
-        main: pink[400],
-        dark: pink[500],
+        main: pink[100],
+        dark: pink[200],
       },
       text: {
         primary: common.white,
