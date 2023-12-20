@@ -15,6 +15,9 @@ export const commonThemeOptions: ThemeOptions = {
         '"Segoe UI Emoji"',
         '"Segoe UI Symbol"',
       ].join(","),
+      button: {
+        textTransform: "none",
+      }
     };
   },
 };

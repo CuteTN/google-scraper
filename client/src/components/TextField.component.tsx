@@ -10,6 +10,7 @@ export function TextField({
   onChange,
   required = false,
   type = "text",
+  onKeyDown,
 }: {
   className?: string;
   name?: string;
@@ -18,7 +19,8 @@ export function TextField({
   placeholder?: string;
   onChange?: (value: string) => any;
   required?: boolean;
-  type?: React.HTMLInputTypeAttribute
+  type?: React.HTMLInputTypeAttribute;
+  onKeyDown?: (event: React.KeyboardEvent) => any;
 }) {
   const textFieldId = React.useId();
 
@@ -46,6 +48,7 @@ export function TextField({
       error={textFieldError}
       placeholder={placeholder}
       type={type}
+      onKeyDown={onKeyDown}
     />
   );
 }

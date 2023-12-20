@@ -10,6 +10,7 @@ export type TranslationMap = {
     please: string;
     signIn: string;
     signUp: string;
+    signOut: string;
     toContinue: string;
     username: string;
     password: string;

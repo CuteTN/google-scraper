@@ -20,7 +20,7 @@ export function Button({
   endIcon?: React.ReactNode;
   startIcon?: React.ReactNode;
   disabled?: boolean;
-  onClick?: () => any;
+  onClick?: (mouseEvent: React.MouseEvent) => any;
 }) {
   return (
     <MuiButton

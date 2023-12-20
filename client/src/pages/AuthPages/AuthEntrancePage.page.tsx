@@ -28,7 +28,7 @@ export function AuthEntrancePage({ page }: { page: "signIn" | "signUp" }) {
     [navigate, page]
   );
 
-  const handleOkClick = React.useCallback(() => {
+  const handleSubmit = React.useCallback(() => {
     if (!username) {
       setErrorMessage(fm("errorMessages.usernameIsRequired"));
       return;
@@ -60,6 +60,12 @@ export function AuthEntrancePage({ page }: { page: "signIn" | "signUp" }) {
     }
   }, [username, password, navigate, page, signIn, fm]);
 
+  const handleTextFieldsKeyDown = React.useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.code === "Enter") {
+      handleSubmit();
+    }
+  }, [handleSubmit])
+
   return (
     <div className="flex min-h-screen align-middle justify-center">
       <Paper className="flex w-96 h-fit align-middle justify-center mt-24">
@@ -76,6 +82,7 @@ export function AuthEntrancePage({ page }: { page: "signIn" | "signUp" }) {
               placeholder={fm("common.username")}
               value={username}
               onChange={setUsername}
+              onKeyDown={handleTextFieldsKeyDown}
             />
             <TextField
               className="w-full"
@@ -85,6 +92,7 @@ export function AuthEntrancePage({ page }: { page: "signIn" | "signUp" }) {
               value={password}
               onChange={setPassword}
               type="password"
+              onKeyDown={handleTextFieldsKeyDown}
             />
 
             {errorMessage && (
@@ -106,7 +114,7 @@ export function AuthEntrancePage({ page }: { page: "signIn" | "signUp" }) {
           </div>
 
           <div className="flex mb-10 justify-end">
-            <Button variant="contained" onClick={handleOkClick}>
+            <Button variant="contained" onClick={handleSubmit}>
               {fm("common.ok")}
             </Button>
           </div>

@@ -12,6 +12,7 @@ export const messagesVi: TranslationMap = {
     please: "vui lòng",
     signIn: "đăng nhập",
     signUp: "đăng ký",
+    signOut: "đăng xuất",
     toContinue: "để tiếp tục",
     password: "mật khẩu",
     username: "tên đăng nhập",

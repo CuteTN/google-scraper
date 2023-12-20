@@ -12,6 +12,7 @@ export const messagesEn: TranslationMap = {
     please: "please",
     signIn: "sign in",
     signUp: "sign up",
+    signOut: "sign out",
     toContinue: "to continue",
     password: "password",
     username: "username",

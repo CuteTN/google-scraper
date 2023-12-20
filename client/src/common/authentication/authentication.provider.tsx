@@ -8,6 +8,7 @@ const AuthenticationContext = React.createContext<{
   isSignedIn: boolean;
   user: TypeUser | null;
   signIn: (username: string, password: string) => Promise<void>;
+  signOut: () => void;
   signedInErrorMessage?: string;
 }>(undefined as any);
 
@@ -16,6 +17,7 @@ function decodeUserFromToken(token: string): TypeUser | null {
 
   try {
     const payload = jwtDecode(token);
+    if (!payload.exp || payload.exp * 1000 <= Date.now()) return null
 
     return {
       id: (payload as any).userId,
@@ -40,7 +42,7 @@ export function AuthenticationProvider({
 
   useEffect(() => {
     const listener = TokenService.onAccessTokenChange((newToken) => {
-      if (newToken) setUser(decodeUserFromToken(newToken));
+      setUser(decodeUserFromToken(newToken));
     });
 
     return () => {
@@ -64,14 +66,19 @@ export function AuthenticationProvider({
     []
   );
 
+  const signOut = React.useCallback(() => {
+    TokenService.accessToken = "";
+  }, [])
+
   const contextValue = React.useMemo(() => {
     return {
       user,
       signIn,
+      signOut,
       signedInErrorMessage,
       isSignedIn: !!user,
     };
-  }, [user, signIn, signedInErrorMessage]);
+  }, [user, signIn, signOut, signedInErrorMessage]);
 
   return (
     <AuthenticationContext.Provider value={contextValue}>
