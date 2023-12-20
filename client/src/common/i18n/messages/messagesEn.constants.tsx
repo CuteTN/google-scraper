@@ -25,4 +25,14 @@ export const messagesEn: TranslationMap = {
     usernameIsRequired: "Username is required.",
     passwordIsRequired: "Password is required.",
   },
+  searchResult: {
+    keyword: "keyword",
+    adwordsCount: "adwords count",
+    linksCount: "links count",
+    resultsCount: "result count",
+    pending: "pending",
+    viewHtml: "view HTML",
+    searchByKeyword: "Search by keyword",
+    rowPerPage: "Row per page"
+  }
 };

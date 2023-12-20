@@ -25,4 +25,14 @@ export const messagesVi: TranslationMap = {
     usernameIsRequired: "Vui lòng điền tên đăng nhập.",
     passwordIsRequired: "Vui lòng điền mật khẩu.",
   },
+  searchResult: {
+    keyword: "từ khoá",
+    adwordsCount: "tổng số quảng cáo",
+    linksCount: "tổng số liên kết",
+    resultsCount: "tổng số kết quả",
+    pending: "đang chờ",
+    viewHtml: "xem HTML",
+    searchByKeyword: "Tìm kiếm từ khoá",
+    rowPerPage: "Giới hạn số dòng",
+  }
 };

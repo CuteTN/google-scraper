@@ -55,10 +55,14 @@ export class SearchResultsController implements IController {
 
     try {
       const total = await SearchResultsRepository.countTotalKeywords(text);
-      let searchResults: searchResultSelect[];
+      let searchResults: Omit<searchResultSelect, "html">[];
       if (offset >= total) searchResults = [];
       else
-        searchResults = await SearchResultsRepository.search(text, page, limit);
+        searchResults = await SearchResultsRepository.search(
+          text,
+          offset,
+          limit
+        );
 
       return res.status(200).send({ data: searchResults, total, page, limit });
     } catch (e) {

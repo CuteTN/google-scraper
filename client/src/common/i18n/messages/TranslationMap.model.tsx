@@ -23,4 +23,14 @@ export type TranslationMap = {
     usernameIsRequired: string;
     passwordIsRequired: string;
   };
+  searchResult: {
+    keyword: string,
+    adwordsCount: string,
+    linksCount: string,
+    resultsCount: string,
+    pending: string,
+    viewHtml: string,
+    searchByKeyword: string,
+    rowPerPage: string,
+  }
 };

@@ -36,7 +36,14 @@ export class SearchResultsRepository {
 
   static async search(searchText: string, offset: number, limit: number) {
     return await db
-      .select()
+      .select({
+        id: searchResultsTable.id,
+        keyword: searchResultsTable.keyword,
+        adwordsCount: searchResultsTable.adwordsCount,
+        linksCount: searchResultsTable.linksCount,
+        resultsCount: searchResultsTable.resultsCount,
+        pending: searchResultsTable.pending,
+      })
       .from(searchResultsTable)
       .where(ilike(searchResultsTable.keyword, `%${searchText}%`))
       .orderBy(searchResultsTable.keyword)
