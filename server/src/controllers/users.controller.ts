@@ -35,8 +35,8 @@ export class UsersController implements IController {
           .status(400)
           .send({ message: "Username and password is required." });
       }
-      
-      const existingUser = await UsersRepository.findByUsername(username)
+
+      const existingUser = await UsersRepository.findByUsername(username);
       if (existingUser) {
         return res
           .status(400)
@@ -78,7 +78,7 @@ export class UsersController implements IController {
           .status(404)
           .send({ message: `Username ${username} is not found.` });
       }
-      if (!await verifyPassword(password, user.hashedPassword)) {
+      if (!(await verifyPassword(password, user.hashedPassword))) {
         return res
           .status(401)
           .send({ message: "The provided password is incorrect." });
@@ -89,10 +89,13 @@ export class UsersController implements IController {
           userId: user.id,
           username: user.username,
         },
-        { expiresIn: "1h" }
+        // TODO: Set it longer
+        { expiresIn: "10min" }
       );
 
-      return res.status(200).send({ accessToken });
+      const userResponse = user as Partial<typeof user>;
+      delete userResponse.hashedPassword;
+      return res.status(200).send({ accessToken, user: userResponse });
     } catch (e) {
       Logger.error(e);
       return res.sendStatus(500);

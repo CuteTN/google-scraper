@@ -9,6 +9,7 @@ create table if not exists app_search_result (
   keyword varchar(200) not null,
   adwords_count smallint,
   links_count smallint,
-  results_count bigint,
-  html varchar
+  results_count integer,
+  html varchar,
+  pending boolean not null default true
 )

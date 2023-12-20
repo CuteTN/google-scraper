@@ -1,5 +1,5 @@
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { bigint, pgTable, smallint, varchar } from "drizzle-orm/pg-core";
+import { bigint, boolean, pgTable, smallint, varchar } from "drizzle-orm/pg-core";
 
 export const searchResultsTable = pgTable("app_search_result", {
   id: varchar("id", { length: 45 }).notNull().primaryKey(),
@@ -8,6 +8,7 @@ export const searchResultsTable = pgTable("app_search_result", {
   linksCount: smallint("links_count"),
   resultsCount: bigint("results_count", { mode: "number" }),
   html: varchar("html"),
+  pending: boolean("pending").notNull().default(true),
 });
 
 export type SearchResultInsert = InferInsertModel<typeof searchResultsTable>;

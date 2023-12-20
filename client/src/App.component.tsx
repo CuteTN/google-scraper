@@ -1,16 +1,18 @@
 import React from "react";
-import { Button } from "./components/Button.component";
-import { testApi } from "./apis/test.apis";
+import { AppI18nProvider } from "./common/i18n/I18nProvider.context";
+import { AppThemeProvider } from "./common/themes/Theme.context";
+import { Navbar } from "./components/Navbar.component";
+import { AppRouter } from "./common/routers/routers";
+import { allLanguages } from "./common/i18n/messages/messages.constants";
+import { themeOptions } from "./common/themes/themes/themes.constants";
 
 export function App() {
-  React.useEffect(() => {
-    testApi();
-  }, []);
-
   return (
-    <div className="text-center hover:bg-pink-100">
-      Hello, this is Google Scraper FE {process.env.SERVER_URL}
-      <Button>OK</Button>
-    </div>
+    <AppI18nProvider allLanguages={allLanguages}>
+      <AppThemeProvider themes={themeOptions}>
+        <Navbar />
+        <AppRouter />
+      </AppThemeProvider>
+    </AppI18nProvider>
   );
 }

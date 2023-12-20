@@ -1,8 +1,5 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 
-/**
- * Fields are added on demands, don't directly use AxiosRequestConfig
- */
 export type HttpRequestConfig = {
   headers?: {
     "x-api-key"?: string;
@@ -11,46 +8,57 @@ export type HttpRequestConfig = {
   data?: any;
 };
 
+export type HttpRequestInterceptorParam = {
+  header: {
+    Authorization: string;
+  };
+};
+
+export type HttpResponseInterceptorError = {
+  response: {
+    status: number;
+  };
+};
+
 /**
- * This class abstracts away the use of Axios from business logic
+ * Methods and properties are added on-demand to avoid coupling with Axios
  */
 export class HttpHelper {
+  readonly axiosInstance: AxiosInstance;
+
   constructor(public readonly baseUrl: string) {
-    if (!baseUrl.endsWith("/")) this.baseUrl = baseUrl + "/";
+    this.axiosInstance = axios.create({ baseURL: baseUrl });
   }
 
-  private combinePath(path: string) {
-    let firstNonSlash = 0;
-    while (path[firstNonSlash] === "/") firstNonSlash++;
-
-    return this.baseUrl + path.substring(firstNonSlash);
+  get(path: string, configs?: HttpRequestConfig) {
+    return this.axiosInstance.get(path, configs);
   }
 
-  get(path: string, body?: any, configs?: HttpRequestConfig) {
-    const url = this.combinePath(path);
-    if (body) {
-      if (!configs) configs = {};
-      configs.data = body;
-    }
-    return axios.get(url, configs);
-  }
-
-  delete(path: string, body?: any, configs?: HttpRequestConfig) {
-    const url = this.combinePath(path);
-    if (body) {
-      if (!configs) configs = {};
-      configs.data = body;
-    }
-    return axios.delete(url, configs);
+  delete(path: string, configs?: HttpRequestConfig) {
+    return this.axiosInstance.delete(path, configs);
   }
 
   put(path: string, body?: any, configs?: HttpRequestConfig) {
-    const url = this.combinePath(path);
-    return axios.put(url, body, configs);
+    return this.axiosInstance.put(path, body, configs);
   }
 
   post(path: string, body?: any, configs?: HttpRequestConfig) {
-    const url = this.combinePath(path);
-    return axios.post(url, body, configs);
+    return this.axiosInstance.post(path, body, configs);
+  }
+
+  setRequestInterceptor(resolve?: (params: HttpRequestInterceptorParam) => HttpRequestInterceptorParam) {
+    /** @ts-ignore */
+    this.axiosInstance.interceptors.request.use((params) => resolve?.(params));
+  }
+
+  setResponseInterceptor(
+    _resolve: any,
+    reject?: (params: HttpResponseInterceptorError) => any
+  ) {
+    /** @ts-ignore */
+    this.axiosInstance.interceptors.request.use(
+      (params) => _resolve(params),
+      reject
+    );
   }
 }
