@@ -6,7 +6,8 @@ import MuiLaunchIcon from "@mui/icons-material/Launch";
 import MuiAccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MuiHomeIcon from "@mui/icons-material/Home";
 import MuiContentCopyIcon from "@mui/icons-material/ContentCopy";
-import MuiDownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
+import MuiDownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import MuiUploadIcon from "@mui/icons-material/Upload";
 
 export const LightModeIcon = MuiLightModeIcon;
 export const DarkModeIcon = MuiDarkModeIcon;
@@ -17,3 +18,4 @@ export const AccountIcon = MuiAccountCircleIcon;
 export const HomeIcon = MuiHomeIcon;
 export const CopyIcon = MuiContentCopyIcon;
 export const DownloadIcon = MuiDownloadForOfflineIcon;
+export const UploadIcon = MuiUploadIcon;

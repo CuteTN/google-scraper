@@ -38,6 +38,8 @@ export const messagesEn: TranslationMap = {
     viewHtml: "view HTML",
     searchByKeyword: "Search by keyword",
     rowPerPage: "Row per page",
-    htmlForGooglePageOfKeyword: "The HTML of Google's search result page of keyword"
-  }
+    htmlForGooglePageOfKeyword:
+      "The HTML of Google's search result page of keyword",
+    uploadCsv: "upload CSV",
+  },
 };

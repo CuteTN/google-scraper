@@ -12,9 +12,7 @@ export class SearchResultsRepository {
     return (await db.insert(searchResultsTable).values(searchResult))?.[0];
   }
 
-  static async findById(
-    id: string
-  ): Promise<searchResultSelect | undefined> {
+  static async findById(id: string): Promise<searchResultSelect | undefined> {
     return (
       await db
         .select()
@@ -32,6 +30,12 @@ export class SearchResultsRepository {
         .from(searchResultsTable)
         .where(eq(searchResultsTable.keyword, keyword))
     )[0];
+  }
+
+  static async getAllKeywords(): Promise<{ keyword: string }[]> {
+    return await db
+      .select({ keyword: searchResultsTable.keyword })
+      .from(searchResultsTable);
   }
 
   static async countTotalKeywords(searchText: string) {

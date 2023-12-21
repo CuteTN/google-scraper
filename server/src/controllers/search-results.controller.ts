@@ -1,18 +1,29 @@
 import { RequestHandler, Router } from "express";
+import multer from "multer";
 import { IController } from "./controller.interface";
 import { GoogleScraper } from "../services/google-scraper.service";
 import { Logger } from "../common/logger/logger";
 import { authMiddleware } from "../middlewares/authentication.middleware";
 import { SearchResultsRepository } from "../repositories/search-results.repo";
 import { searchResultSelect } from "../models/search-results.model";
+import { parseCSVString } from "../common/utils/csv.utils";
 
 export class SearchResultsController implements IController {
   createRouter = () => {
     const router = Router();
+    const upload = multer();
 
     router.post("/scrape-single", authMiddleware, this.scrapeSingle);
     router.post("/search", authMiddleware, this.search);
     router.get("/html/:searchResultId", authMiddleware, this.getHtml);
+    router.get("/all-keywords", authMiddleware, this.getAllKeywords);
+    router.get("/info/:keyword", authMiddleware, this.getInfoOfKeyword);
+    router.post(
+      "/upload-csv",
+      authMiddleware,
+      upload.single("file"),
+      this.uploadCsvOfKeywords
+    );
     return router;
   };
 
@@ -23,7 +34,9 @@ export class SearchResultsController implements IController {
       return res.status(400).send({ message: "keyword is required." });
     }
     if (keyword.length > 200) {
-      return res.status(400).send({ message: "The length of keyword could not exceed 200."})
+      return res
+        .status(400)
+        .send({ message: "The length of keyword could not exceed 200." });
     }
 
     const existingSearchResult = await SearchResultsRepository.findByKeyword(
@@ -77,12 +90,11 @@ export class SearchResultsController implements IController {
 
   getHtml: RequestHandler = async (req, res) => {
     const { searchResultId } = req.params;
+    if (!searchResultId) {
+      return res.status(400).send({ message: "ID is required." });
+    }
 
     try {
-      if (!searchResultId) {
-        return res.status(400).send({ message: "ID is required." });
-      }
-
       const searchResult = await SearchResultsRepository.findById(
         searchResultId
       );
@@ -98,6 +110,52 @@ export class SearchResultsController implements IController {
         pending: searchResult.pending,
         html: searchResult.html,
       });
+    } catch (e) {
+      Logger.error(e);
+      return res.sendStatus(500);
+    }
+  };
+
+  getAllKeywords: RequestHandler = async (_req, res) => {
+    try {
+      const keywords = await SearchResultsRepository.getAllKeywords();
+      return res.status(200).send({
+        keywords: keywords.map((row) => row.keyword),
+      });
+    } catch (e) {
+      Logger.error(e);
+      return res.sendStatus(500);
+    }
+  };
+
+  getInfoOfKeyword: RequestHandler = async (req, res) => {
+    const { keyword } = req.params;
+    if (!keyword) {
+      return res.status(400).send({ message: "keyword is required." });
+    }
+
+    try {
+      const searchResult = await SearchResultsRepository.findByKeyword(keyword);
+      return res.status(200).send(searchResult);
+    } catch (e) {
+      Logger.error(e);
+      return res.sendStatus(500);
+    }
+  };
+
+  uploadCsvOfKeywords: RequestHandler = async (req, res) => {
+    try {
+      const csvFile = req.file;
+      if (!csvFile) {
+        return res.status(400).send({ message: "A CSV file is required." });
+      }
+      const rawContent = csvFile?.buffer?.toString();
+      if (rawContent === "") {
+        return res.status(400).send({ message: "The provided CSV is empty." });
+      }
+      
+      // TODO: Change this to bulk scraping logic
+      return res.status(200).send({ parsed: await parseCSVString(rawContent) });
     } catch (e) {
       Logger.error(e);
       return res.sendStatus(500);

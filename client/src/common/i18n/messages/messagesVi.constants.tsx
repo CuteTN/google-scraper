@@ -39,5 +39,6 @@ export const messagesVi: TranslationMap = {
     searchByKeyword: "Tìm kiếm từ khoá",
     rowPerPage: "Giới hạn số dòng",
     htmlForGooglePageOfKeyword: "Mã HTML của trang tìm kiếm Google cho từ khoá",
-  }
+    uploadCsv: "tải lên CSV",
+  },
 };

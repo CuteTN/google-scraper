@@ -12,9 +12,15 @@ export async function fetchSearchResultsApi(
   });
 }
 
-export async function fetchSearchResultHtmlByIdApi(
-  id: string,
-) {
-  if (!id) return Promise.reject("ID is required.")
+export async function fetchSearchResultHtmlByIdApi(id: string) {
+  if (!id) return Promise.reject("ID is required.");
   return serverEndPoint.get(`/v1/search-results/html/${id}`);
+}
+
+export async function uploadCsvOfKeywordsApi(csvFile: File) {
+  const formData = new FormData();
+  formData.set("file", csvFile);
+  return serverEndPoint.post("/v1/search-results/upload-csv", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 }
