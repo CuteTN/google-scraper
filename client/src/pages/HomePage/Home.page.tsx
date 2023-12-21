@@ -10,10 +10,10 @@ import { useAppI18n } from "../../common/i18n/I18nProvider.context";
 import { BackdropLoading } from "../../components/BackdropLoading.component";
 import { useAppNavigate } from "../../common/routers/navigate.hook";
 import { Button } from "../../components/Button.component";
-import { UploadIcon } from "../../components/Icons.components";
+import { RefreshIcon, UploadIcon } from "../../components/Icons.components";
 import { randomInt } from "../../utils/number.utils";
 
-const DEBOUNCE_TIME = 500;
+const DEBOUNCE_TIME = 300;
 
 export function HomePage() {
   const { fm } = useAppI18n();
@@ -31,27 +31,31 @@ export function HomePage() {
   const [searchResults, setSearchResults] =
     React.useState<TypeSearchResult[]>();
 
-  React.useEffect(() => {
+  const fetchSearchResults = React.useCallback(() => {
     setIsLoading(true);
+    fetchSearchResultsApi(text, page, limit)
+      .then((res) => {
+        setSearchResults(res.data?.data ?? []);
+        setTotal(res.data.total ?? 0);
+      })
+      .catch((e) => {
+        // TODO: Show error
+        console.error(e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [text, page, limit]);
+
+  React.useEffect(() => {
     const timeoutId = setTimeout(() => {
-      fetchSearchResultsApi(text, page, limit)
-        .then((res) => {
-          setSearchResults(res.data?.data ?? []);
-          setTotal(res.data.total ?? 0);
-        })
-        .catch((e) => {
-          // TODO: Show error
-          console.error(e);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      fetchSearchResults();
     }, DEBOUNCE_TIME);
 
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [text, page, limit]);
+  }, [fetchSearchResults]);
 
   const handleTextChange = React.useCallback((newText: string) => {
     setText(newText);
@@ -75,7 +79,14 @@ export function HomePage() {
       // TODO: Show error
       if (!file) return;
       if (file.type !== "text/csv") return;
-      uploadCsvOfKeywordsApi(file);
+      uploadCsvOfKeywordsApi(file)
+        .then(() => {
+          fetchSearchResults();
+        })
+        .catch((e) => {
+          // TODO: Show error
+          console.error(e);
+        });
 
       setUploadCsvInputKey((prev) => {
         let newInputKey: number;
@@ -86,7 +97,7 @@ export function HomePage() {
         return newInputKey;
       });
     },
-    []
+    [fetchSearchResults]
   );
 
   return (
@@ -101,6 +112,13 @@ export function HomePage() {
             value={text}
             onChange={handleTextChange}
           />
+          <Button
+            variant="contained"
+            startIcon={<RefreshIcon className="ml-4" />}
+            onClick={fetchSearchResults}
+          >
+            <div className="text-lg mr-4">{fm("common.refresh")}</div>
+          </Button>
           <Button
             variant="contained"
             startIcon={<UploadIcon className="ml-4" />}

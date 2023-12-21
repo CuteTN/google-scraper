@@ -22,6 +22,7 @@ export type TranslationMap = {
     backHome: string;
     copy: string;
     download: string;
+    refresh: string;
   };
   errorMessages: {
     usernameIsRequired: string;
@@ -38,5 +39,6 @@ export type TranslationMap = {
     rowPerPage: string;
     htmlForGooglePageOfKeyword: string;
     uploadCsv: string;
+    thisDataIsPending: string;
   };
 };

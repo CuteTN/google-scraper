@@ -24,6 +24,7 @@ export const messagesVi: TranslationMap = {
     nothingHere: "Không có gì ở đây",
     copy: "sao chép",
     download: "tải về",
+    refresh: "tải lại",
   },
   errorMessages: {
     usernameIsRequired: "Vui lòng điền tên đăng nhập.",
@@ -40,5 +41,6 @@ export const messagesVi: TranslationMap = {
     rowPerPage: "Giới hạn số dòng",
     htmlForGooglePageOfKeyword: "Mã HTML của trang tìm kiếm Google cho từ khoá",
     uploadCsv: "tải lên CSV",
+    thisDataIsPending: "Dữ liệu đang chờ xử lý."
   },
 };

@@ -8,6 +8,8 @@ import MuiHomeIcon from "@mui/icons-material/Home";
 import MuiContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MuiDownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import MuiUploadIcon from "@mui/icons-material/Upload";
+import MuiHourglassFullIcon from "@mui/icons-material/HourglassFull";
+import MuiRefreshIcon from '@mui/icons-material/Refresh';
 
 export const LightModeIcon = MuiLightModeIcon;
 export const DarkModeIcon = MuiDarkModeIcon;
@@ -19,3 +21,5 @@ export const HomeIcon = MuiHomeIcon;
 export const CopyIcon = MuiContentCopyIcon;
 export const DownloadIcon = MuiDownloadForOfflineIcon;
 export const UploadIcon = MuiUploadIcon;
+export const PendingIcon = MuiHourglassFullIcon;
+export const RefreshIcon = MuiRefreshIcon;

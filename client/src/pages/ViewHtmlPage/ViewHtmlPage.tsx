@@ -85,21 +85,26 @@ export function ViewHtmlPage() {
             {fm("searchResult.htmlForGooglePageOfKeyword")}:&nbsp;
             <b>{searchResult?.keyword ?? "N/A"}</b>
           </Typography>
-          <Tooltip title={fm("common.download")} placement="top">
-            <div>
-              <Fab
-                className="ml-3"
-                size={"small"}
-                color="primary"
-                onClick={handleDownloadHtml}
-              >
-                <DownloadIcon />
-              </Fab>
-            </div>
-          </Tooltip>
+          {searchResult && (
+            <Tooltip title={fm("common.download")} placement="top">
+              <div>
+                <Fab
+                  className="ml-3"
+                  size={"small"}
+                  color="primary"
+                  onClick={handleDownloadHtml}
+                  disabled={searchResult?.pending}
+                >
+                  <DownloadIcon />
+                </Fab>
+              </div>
+            </Tooltip>
+          )}
         </div>
         <div className="max-w-[95%] break-all whitespace-break-spaces">
-          {searchResult?.html ?? "N/A"}{" "}
+          {searchResult?.pending
+            ? fm("searchResult.thisDataIsPending")
+            : searchResult?.html ?? "N/A"}{" "}
         </div>
         <BackdropLoading className="!absolute" shown={isLoading} />
       </div>

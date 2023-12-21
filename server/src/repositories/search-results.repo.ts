@@ -65,4 +65,8 @@ export class SearchResultsRepository {
       .offset(offset)
       .limit(limit);
   }
+
+  static async insertSearchResults(searchResults: SearchResultInsert[]) {
+    return await db.insert(searchResultsTable).values(searchResults);
+  }
 }

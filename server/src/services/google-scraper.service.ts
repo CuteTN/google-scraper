@@ -19,7 +19,7 @@ export class GoogleScraper {
     const url =
       this.BASE_GOOGLE_SEARCH_URL +
       keyword
-        .split(/[\ \+,-]/)
+        .split(/[\ \+,]/)
         .map((s) => s.trim())
         .join("+") +
       "&hl=en";
