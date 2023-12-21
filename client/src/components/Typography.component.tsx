@@ -36,7 +36,13 @@ export function Typography({
 }) {
   return (
     <Tooltip title={tooltip} placement={tooltipPlacement}>
-      <MuiTypography className={className} variant={variant} noWrap={ellipsis} color={color} fontWeight={fontWeight}>
+      <MuiTypography
+        className={className}
+        variant={variant}
+        noWrap={ellipsis}
+        color={color}
+        fontWeight={fontWeight}
+      >
         {children}
       </MuiTypography>
     </Tooltip>

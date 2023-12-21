@@ -56,7 +56,7 @@ export class HttpHelper {
     reject?: (params: HttpResponseInterceptorError) => any
   ) {
     /** @ts-ignore */
-    this.axiosInstance.interceptors.request.use(
+    this.axiosInstance.interceptors.response.use(
       (params) => _resolve(params),
       reject
     );

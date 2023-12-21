@@ -3,6 +3,8 @@ import { HomePage } from "../../pages/HomePage/Home.page";
 import { SignInPage } from "../../pages/AuthPages/SignIn.page";
 import { SignUpPage } from "../../pages/AuthPages/SignUp.page";
 import { PageGuard } from "../authentication/PageGuard.component";
+import { ViewHtmlPage } from "../../pages/ViewHtmlPage/ViewHtmlPage";
+import { NotFoundPage } from "../../pages/NotFoundPage/NotFound.page";
 
 export const ROUTES = {
   home: {
@@ -20,6 +22,18 @@ export const ROUTES = {
   signUp: {
     path: "/sign-up",
     element: <SignUpPage />,
+  },
+  viewHtml: {
+    path: "/view-html/:searchResultId",
+    element: (
+      <PageGuard>
+        <ViewHtmlPage />
+      </PageGuard>
+    ),
+  },
+  notFound: {
+    path: "*",
+    element: <NotFoundPage />,
   },
 };
 

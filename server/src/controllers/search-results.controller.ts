@@ -12,6 +12,7 @@ export class SearchResultsController implements IController {
 
     router.post("/scrape-single", authMiddleware, this.scrapeSingle);
     router.post("/search", authMiddleware, this.search);
+    router.get("/html/:searchResultId", authMiddleware, this.getHtml);
     return router;
   };
 
@@ -20,6 +21,9 @@ export class SearchResultsController implements IController {
     keyword = keyword?.trim();
     if (!keyword) {
       return res.status(400).send({ message: "keyword is required." });
+    }
+    if (keyword.length > 200) {
+      return res.status(400).send({ message: "The length of keyword could not exceed 200."})
     }
 
     const existingSearchResult = await SearchResultsRepository.findByKeyword(
@@ -65,6 +69,35 @@ export class SearchResultsController implements IController {
         );
 
       return res.status(200).send({ data: searchResults, total, page, limit });
+    } catch (e) {
+      Logger.error(e);
+      return res.sendStatus(500);
+    }
+  };
+
+  getHtml: RequestHandler = async (req, res) => {
+    const { searchResultId } = req.params;
+
+    try {
+      if (!searchResultId) {
+        return res.status(400).send({ message: "ID is required." });
+      }
+
+      const searchResult = await SearchResultsRepository.findById(
+        searchResultId
+      );
+      if (!searchResult) {
+        return res.status(404).send({
+          message: "The search result with specified ID is not found.",
+        });
+      }
+
+      return res.status(200).send({
+        id: searchResult.id,
+        keyword: searchResult.keyword,
+        pending: searchResult.pending,
+        html: searchResult.html,
+      });
     } catch (e) {
       Logger.error(e);
       return res.sendStatus(500);

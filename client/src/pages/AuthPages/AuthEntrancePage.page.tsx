@@ -13,7 +13,7 @@ export function AuthEntrancePage({ page }: { page: "signIn" | "signUp" }) {
   const location = useLocation();
   const { fm } = useAppI18n();
   const navigate = useAppNavigate();
-  const { signIn } = useAuth();
+  const { signIn, isSignedIn } = useAuth();
   const [username, setUsername] = React.useState<string>(
     location?.state?.username ?? ""
   );
@@ -42,7 +42,7 @@ export function AuthEntrancePage({ page }: { page: "signIn" | "signUp" }) {
     if (page === "signIn") {
       signIn(username, password)
         .then(() => {
-          navigate("home");
+          navigate("home", { replace: true });
         })
         .catch((e) => {
           const message = e?.response?.data?.message;
@@ -51,7 +51,7 @@ export function AuthEntrancePage({ page }: { page: "signIn" | "signUp" }) {
     } else {
       signUpApi(username, password)
         .then(() => {
-          navigate("signIn", { state: { username } });
+          navigate("signIn", { state: { username }, replace: true });
         })
         .catch((e) => {
           const message = e?.response?.data?.message;
@@ -60,11 +60,20 @@ export function AuthEntrancePage({ page }: { page: "signIn" | "signUp" }) {
     }
   }, [username, password, navigate, page, signIn, fm]);
 
-  const handleTextFieldsKeyDown = React.useCallback((e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.code === "Enter") {
-      handleSubmit();
+  const handleTextFieldsKeyDown = React.useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.code === "Enter") {
+        handleSubmit();
+      }
+    },
+    [handleSubmit]
+  );
+
+  React.useEffect(() => {
+    if (isSignedIn) {
+      navigate("home", { replace: true });
     }
-  }, [handleSubmit])
+  }, [navigate, isSignedIn]);
 
   return (
     <div className="flex min-h-screen align-middle justify-center">

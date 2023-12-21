@@ -11,6 +11,7 @@ import { Paper } from "./Paper.component";
 import { useAppI18n } from "../common/i18n/I18nProvider.context";
 import { LaunchIcon } from "./Icons.components";
 import { Tooltip } from "./Tooltip.component";
+import { TableFooter } from "@mui/material";
 
 export function SearchResultsTable({
   items,
@@ -19,6 +20,7 @@ export function SearchResultsTable({
   total,
   onChangePage,
   onChangeLimit,
+  onViewHtml,
 }: {
   items: TypeSearchResult[];
   page: number;
@@ -26,8 +28,18 @@ export function SearchResultsTable({
   total: number;
   onChangePage: (newPage: number) => any;
   onChangeLimit: (newLimit: number) => any;
+  onViewHtml: (id: string) => any;
 }) {
   const { fm } = useAppI18n();
+
+  /**
+   * Filled up empty rows to avoid page jumping experience
+   */
+  const filledUpItems = React.useMemo<(TypeSearchResult | null)[]>(() => {
+    const result: (TypeSearchResult | null)[] = [...items];
+    while (result.length < limit) result.push(null);
+    return result;
+  }, [items, limit]);
 
   const handleChangePage = React.useCallback(
     (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -44,6 +56,13 @@ export function SearchResultsTable({
     [onChangePage, onChangeLimit]
   );
 
+  const handleViewHtml = React.useCallback(
+    (id?: string) => {
+      if (id) onViewHtml?.(id);
+    },
+    [onViewHtml]
+  );
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -51,50 +70,71 @@ export function SearchResultsTable({
           <TableHead>
             <TableRow>
               <TableCell>{fm("searchResult.keyword")}</TableCell>
-              <TableCell align="right">
+              <TableCell width={"20%"} align="right">
                 {fm("searchResult.adwordsCount")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell width={"20%"} align="right">
                 {fm("searchResult.linksCount")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell width={"20%"} align="right">
                 {fm("searchResult.resultsCount")}
               </TableCell>
-              <TableCell align="right">HTML</TableCell>
+              <TableCell width={30} align="right">
+                HTML
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {items.map((row) => (
+            {filledUpItems.map((row, index) => (
               <TableRow
-                key={row.id}
+                key={row?.id ?? index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.keyword}
+                  {row === null ? "-" : row.keyword}
                 </TableCell>
-                <TableCell align="right">{row.adwordsCount}</TableCell>
-                <TableCell align="right">{row.linksCount}</TableCell>
-                <TableCell align="right">{row.resultsCount}</TableCell>
                 <TableCell align="right">
-                  <Tooltip title={fm("searchResult.viewHtml")}>
-                    <LaunchIcon className="cursor-pointer" />
+                  {row === null ? "-" : row.adwordsCount}
+                </TableCell>
+                <TableCell align="right">
+                  {row === null ? "-" : row.linksCount}
+                </TableCell>
+                <TableCell align="right">
+                  {row === null ? "-" : row.resultsCount}
+                </TableCell>
+                <TableCell align="right">
+                  <Tooltip
+                    title={row === null ? "" : fm("searchResult.viewHtml")}
+                    placement="top"
+                  >
+                    <LaunchIcon
+                      className={
+                        row === null ? "cursor-default" : "cursor-pointer"
+                      }
+                      color={row === null ? "disabled" : "inherit"}
+                      onClick={() => handleViewHtml(row?.id)}
+                    />
                   </Tooltip>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                colSpan={5}
+                count={total}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={limit}
+                onRowsPerPageChange={handleChangeLimit}
+                labelRowsPerPage={fm("searchResult.rowPerPage")}
+                rowsPerPageOptions={[5, 10, 15, 20, 50, 100]}
+              />
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
-      <TablePagination
-        component="div"
-        count={total}
-        page={page}
-        onPageChange={handleChangePage}
-        rowsPerPage={limit}
-        onRowsPerPageChange={handleChangeLimit}
-        labelRowsPerPage={fm("searchResult.rowPerPage")}
-        rowsPerPageOptions={[5, 10, 15, 20, 50, 100]}
-      />
     </>
   );
 }

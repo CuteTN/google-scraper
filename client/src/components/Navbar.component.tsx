@@ -8,7 +8,7 @@ import { useAppI18n } from "../common/i18n/I18nProvider.context";
 import { AppThemeOptions } from "../common/themes/themes/AppTheme.model";
 import { Button } from "./Button.component";
 import { useAuth } from "../common/authentication/authentication.provider";
-import { SignInIcon, SignOutIcon } from "./Icons.components";
+import { AccountIcon, SignInIcon, SignOutIcon } from "./Icons.components";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
@@ -79,6 +79,7 @@ export function Navbar() {
               variant="contained"
               color="primary"
               onClick={(e) => setUserMenuAnchorElement(e.currentTarget as any)}
+              startIcon={<AccountIcon />}
             >
               <Typography
                 className="whitespace-nowrap text-ellipsis"
@@ -94,7 +95,7 @@ export function Navbar() {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleSignOut}>
-                <SignOutIcon className="mr-2"/>
+                <SignOutIcon className="mr-2" />
                 {fm("common.signOut")}
               </MenuItem>
             </Menu>

@@ -11,3 +11,10 @@ export async function fetchSearchResultsApi(
     limit,
   });
 }
+
+export async function fetchSearchResultHtmlByIdApi(
+  id: string,
+) {
+  if (!id) return Promise.reject("ID is required.")
+  return serverEndPoint.get(`/v1/search-results/html/${id}`);
+}

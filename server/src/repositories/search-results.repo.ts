@@ -1,5 +1,5 @@
+import { eq, ilike, sql } from "drizzle-orm";
 import { db } from "../models/dp.pool";
-import { eq, ilike, or, sql } from "drizzle-orm";
 import {
   SearchResultInsert,
   searchResultSelect,
@@ -10,6 +10,17 @@ import { usersTable } from "../models/users.model";
 export class SearchResultsRepository {
   static async create(searchResult: SearchResultInsert) {
     return (await db.insert(searchResultsTable).values(searchResult))?.[0];
+  }
+
+  static async findById(
+    id: string
+  ): Promise<searchResultSelect | undefined> {
+    return (
+      await db
+        .select()
+        .from(searchResultsTable)
+        .where(eq(searchResultsTable.id, id))
+    )[0];
   }
 
   static async findByKeyword(

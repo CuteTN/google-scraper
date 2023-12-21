@@ -20,6 +20,10 @@ export const messagesVi: TranslationMap = {
     createNewAccount: "Tạo tài khoản mới",
     ok: "OK",
     error: "lỗi",
+    backHome: "về trang chủ",
+    nothingHere: "Không có gì ở đây",
+    copy: "sao chép",
+    download: "tải về",
   },
   errorMessages: {
     usernameIsRequired: "Vui lòng điền tên đăng nhập.",
@@ -34,5 +38,6 @@ export const messagesVi: TranslationMap = {
     viewHtml: "xem HTML",
     searchByKeyword: "Tìm kiếm từ khoá",
     rowPerPage: "Giới hạn số dòng",
+    htmlForGooglePageOfKeyword: "Mã HTML của trang tìm kiếm Google cho từ khoá",
   }
 };

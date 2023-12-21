@@ -20,6 +20,10 @@ export const messagesEn: TranslationMap = {
     alreadyHaveAccount: "Already have an account",
     ok: "OK",
     error: "error",
+    backHome: "back to home",
+    nothingHere: "there's nothing here",
+    copy: "copy",
+    download: "download",
   },
   errorMessages: {
     usernameIsRequired: "Username is required.",
@@ -33,6 +37,7 @@ export const messagesEn: TranslationMap = {
     pending: "pending",
     viewHtml: "view HTML",
     searchByKeyword: "Search by keyword",
-    rowPerPage: "Row per page"
+    rowPerPage: "Row per page",
+    htmlForGooglePageOfKeyword: "The HTML of Google's search result page of keyword"
   }
 };
