@@ -18,19 +18,25 @@ export type TranslationMap = {
     alreadyHaveAccount: string;
     ok: string;
     error: string;
+    nothingHere: string;
+    backHome: string;
+    copy: string;
+    download: string;
   };
   errorMessages: {
     usernameIsRequired: string;
     passwordIsRequired: string;
   };
   searchResult: {
-    keyword: string,
-    adwordsCount: string,
-    linksCount: string,
-    resultsCount: string,
-    pending: string,
-    viewHtml: string,
-    searchByKeyword: string,
-    rowPerPage: string,
-  }
+    keyword: string;
+    adwordsCount: string;
+    linksCount: string;
+    resultsCount: string;
+    pending: string;
+    viewHtml: string;
+    searchByKeyword: string;
+    rowPerPage: string;
+    htmlForGooglePageOfKeyword: string;
+    uploadCsv: string;
+  };
 };

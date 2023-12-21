@@ -11,6 +11,8 @@ export function TextField({
   required = false,
   type = "text",
   onKeyDown,
+  multiline,
+  contentEditable,
 }: {
   className?: string;
   name?: string;
@@ -21,6 +23,8 @@ export function TextField({
   required?: boolean;
   type?: React.HTMLInputTypeAttribute;
   onKeyDown?: (event: React.KeyboardEvent) => any;
+  multiline?: boolean;
+  contentEditable?: boolean | "inherit" | "plaintext-only";
 }) {
   const textFieldId = React.useId();
 
@@ -49,6 +53,8 @@ export function TextField({
       placeholder={placeholder}
       type={type}
       onKeyDown={onKeyDown}
+      multiline={multiline}
+      contentEditable={contentEditable}
     />
   );
 }
