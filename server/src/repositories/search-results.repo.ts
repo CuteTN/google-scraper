@@ -69,4 +69,18 @@ export class SearchResultsRepository {
   static async insertSearchResults(searchResults: SearchResultInsert[]) {
     return await db.insert(searchResultsTable).values(searchResults);
   }
+
+  static async getAllPendingSearchResults() {
+    return await db
+      .select()
+      .from(searchResultsTable)
+      .where(eq(searchResultsTable.pending, true));
+  }
+
+  static async updateSearchResultById(searchResult: SearchResultInsert) {
+    return await db
+      .update(searchResultsTable)
+      .set(searchResult)
+      .where(eq(searchResultsTable.id, searchResult.id));
+  }
 }

@@ -5,11 +5,14 @@ import { Logger } from "../common/logger/logger";
 import { JSDOM } from "jsdom";
 
 export class GoogleScraper {
-  private static readonly BASE_GOOGLE_SEARCH_URL = "https://www.google.com/search?q=";
+  private static readonly BASE_GOOGLE_SEARCH_URL =
+    "https://www.google.com/search?q=";
   private static readonly API_HEADERS = {
     "User-Agent":
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 OPR/104.0.0.0",
   };
+  public static readonly NO_RESULT_STATS_ELEMENT_ERROR =
+    "No result-stats element error.";
 
   static async retrieveGoogleSearchHtml(keyword: string): Promise<string> {
     if (!keyword) {
@@ -39,7 +42,7 @@ export class GoogleScraper {
    */
   private static extractResultsCount(dom: JSDOM): number {
     const resultStatsDiv = dom.window.document.getElementById("result-stats");
-    if (!resultStatsDiv) return 0;
+    if (!resultStatsDiv) throw new Error(this.NO_RESULT_STATS_ELEMENT_ERROR);
 
     const innerHtml = resultStatsDiv.innerHTML;
     if (!innerHtml) return 0;
@@ -72,14 +75,11 @@ export class GoogleScraper {
   }
 
   /**
-   * Strategy: Count all <h1> tags in the dom whose inner text is "Ads"
+   * Strategy: Count all <div> that has the field "data-text-ad".
    * Note: This only works in English search result, i.e: query param hl=en must be included.
    */
   private static extractAdwordsCount(dom: JSDOM): number {
-    const h1Elements = Array.from(
-      dom.window.document.getElementsByTagName("h1")
-    );
-    return h1Elements.filter((element) => element.innerHTML === "Ads").length;
+    return dom.window.document.querySelectorAll("div[data-text-ad]").length;
   }
 
   static extractDataFromHtml(
