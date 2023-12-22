@@ -2,7 +2,30 @@
 
 ## Table of content
 
-
+- [Table of content](#table-of-content)
+- [Introduction](#introduction)
+- [Preview](#preview)
+- [Setup, build and Run](#setup--build-and-run)
+  - [Database](#database)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+- [Backend APIs](#backend-apis)
+  - [User and Authentication](#user-and-authentication)
+    - [Sign up](#sign-up)
+    - [Sign in](#sign-in)
+    - [Get signed-in user information](#get-signed-in-user-information)
+  - [Search results](#search-results)
+    - [Scrape single keyword](#scrape-single-keyword)
+    - [Fetch scraped search results](#fetch-scraped-search-results)
+    - [Fetch list of all keywords](#fetch-list-of-all-keywords)
+    - [Fetch search result by keywords](#fetch-search-result-by-keywords)
+    - [Fetch HTML by search result ID](#fetch-html-by-search-result-id)
+    - [Upload CSV of keywords](#upload-csv-of-keywords)
+  - [Scraping Scheduler](#scraping-scheduler)
+    - [Restart Scraping Scheduler](#restart-scraping-scheduler)
+- [Solutions](#solutions)
+  - [Scraping Google's page](#scraping-google-s-page)
+  - [Avoiding spam detection](#avoiding-spam-detection)
 
 ## Introduction
 
