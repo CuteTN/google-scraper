@@ -24,6 +24,7 @@ export const messagesEn: TranslationMap = {
     nothingHere: "there's nothing here",
     copy: "copy",
     download: "download",
+    refresh: "refresh",
   },
   errorMessages: {
     usernameIsRequired: "Username is required.",
@@ -41,5 +42,6 @@ export const messagesEn: TranslationMap = {
     htmlForGooglePageOfKeyword:
       "The HTML of Google's search result page of keyword",
     uploadCsv: "upload CSV",
+    thisDataIsPending: "This data is pending."
   },
 };

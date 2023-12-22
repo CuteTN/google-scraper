@@ -5,8 +5,13 @@ import { GoogleScraper } from "../services/google-scraper.service";
 import { Logger } from "../common/logger/logger";
 import { authMiddleware } from "../middlewares/authentication.middleware";
 import { SearchResultsRepository } from "../repositories/search-results.repo";
-import { searchResultSelect } from "../models/search-results.model";
+import {
+  SearchResultInsert,
+  searchResultSelect,
+} from "../models/search-results.model";
 import { parseCSVString } from "../common/utils/csv.utils";
+import { validateKeyword } from "../common/utils/validate-keyword.utils";
+import { randomUUID } from "crypto";
 
 export class SearchResultsController implements IController {
   createRouter = () => {
@@ -153,9 +158,30 @@ export class SearchResultsController implements IController {
       if (rawContent === "") {
         return res.status(400).send({ message: "The provided CSV is empty." });
       }
-      
-      // TODO: Change this to bulk scraping logic
-      return res.status(200).send({ parsed: await parseCSVString(rawContent) });
+
+      const keywords = await parseCSVString(rawContent);
+      const validKeywords = [] as string[];
+      for (let keyword of keywords) {
+        keyword = keyword.trim();
+
+        if (!validateKeyword(keyword)) continue;
+        const existingSearchResult =
+          await SearchResultsRepository.findByKeyword(keyword);
+        if (existingSearchResult) continue;
+
+        validKeywords.push(keyword);
+      }
+
+      const pendingSearchResults = validKeywords.map<SearchResultInsert>(
+        (keyword) => ({
+          id: randomUUID(),
+          keyword,
+          pending: true,
+        })
+      );
+      if (pendingSearchResults.length) await SearchResultsRepository.insertSearchResults(pendingSearchResults);
+
+      return res.sendStatus(202);
     } catch (e) {
       Logger.error(e);
       return res.sendStatus(500);

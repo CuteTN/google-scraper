@@ -9,7 +9,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { TypeSearchResult } from "../models/search-results.model";
 import { Paper } from "./Paper.component";
 import { useAppI18n } from "../common/i18n/I18nProvider.context";
-import { LaunchIcon } from "./Icons.components";
+import { LaunchIcon, PendingIcon } from "./Icons.components";
 import { Tooltip } from "./Tooltip.component";
 import { TableFooter } from "@mui/material";
 
@@ -103,18 +103,29 @@ export function SearchResultsTable({
                   {row === null ? "-" : row.resultsCount}
                 </TableCell>
                 <TableCell align="right">
-                  <Tooltip
-                    title={row === null ? "" : fm("searchResult.viewHtml")}
-                    placement="top"
-                  >
-                    <LaunchIcon
-                      className={
-                        row === null ? "cursor-default" : "cursor-pointer"
+                  {row?.pending ? (
+                    <Tooltip
+                      title={
+                        row === null ? "" : fm("searchResult.thisDataIsPending")
                       }
-                      color={row === null ? "disabled" : "inherit"}
-                      onClick={() => handleViewHtml(row?.id)}
-                    />
-                  </Tooltip>
+                      placement="top"
+                    >
+                      <PendingIcon color="disabled" />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip
+                      title={row === null ? "" : fm("searchResult.viewHtml")}
+                      placement="top"
+                    >
+                      <LaunchIcon
+                        className={
+                          row === null ? "cursor-default" : "cursor-pointer"
+                        }
+                        color={row === null ? "disabled" : "inherit"}
+                        onClick={() => handleViewHtml(row?.id)}
+                      />
+                    </Tooltip>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
