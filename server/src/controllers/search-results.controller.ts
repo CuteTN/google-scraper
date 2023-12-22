@@ -161,19 +161,20 @@ export class SearchResultsController implements IController {
       }
 
       const keywords = await parseCSVString(rawContent);
-      const validKeywords = [] as string[];
+      const validKeywords = new Set<string>()
       for (let keyword of keywords) {
         keyword = keyword.trim();
 
+        if (validKeywords.has(keyword)) continue;
         if (!validateKeyword(keyword)) continue;
         const existingSearchResult =
           await SearchResultsRepository.findByKeyword(keyword);
         if (existingSearchResult) continue;
 
-        validKeywords.push(keyword);
+        validKeywords.add(keyword);
       }
 
-      const pendingSearchResults = validKeywords.map<searchResultSelect>(
+      const pendingSearchResults = Array.from(validKeywords).map<searchResultSelect>(
         (keyword) => ({
           id: randomUUID(),
           keyword,
