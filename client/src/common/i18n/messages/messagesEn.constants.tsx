@@ -34,7 +34,7 @@ export const messagesEn: TranslationMap = {
     keyword: "keyword",
     adwordsCount: "adwords count",
     linksCount: "links count",
-    resultsCount: "result count",
+    resultsCount: "results count",
     pending: "pending",
     viewHtml: "view HTML",
     searchByKeyword: "Search by keyword",
