@@ -12,6 +12,7 @@ import {
 import { parseCSVString } from "../common/utils/csv.utils";
 import { validateKeyword } from "../common/utils/validate-keyword.utils";
 import { randomUUID } from "crypto";
+import { GoogleScrapingScheduler } from "../services/google-scraping-scheduler.service";
 
 export class SearchResultsController implements IController {
   createRouter = () => {
@@ -172,15 +173,21 @@ export class SearchResultsController implements IController {
         validKeywords.push(keyword);
       }
 
-      const pendingSearchResults = validKeywords.map<SearchResultInsert>(
+      const pendingSearchResults = validKeywords.map<searchResultSelect>(
         (keyword) => ({
           id: randomUUID(),
           keyword,
           pending: true,
+          adwordsCount: null,
+          linksCount: null,
+          resultsCount: null,
+          html: null,
         })
       );
-      if (pendingSearchResults.length) await SearchResultsRepository.insertSearchResults(pendingSearchResults);
+      if (pendingSearchResults.length)
+        await SearchResultsRepository.insertSearchResults(pendingSearchResults);
 
+      GoogleScrapingScheduler.addPendingSearchResults(pendingSearchResults);
       return res.sendStatus(202);
     } catch (e) {
       Logger.error(e);
