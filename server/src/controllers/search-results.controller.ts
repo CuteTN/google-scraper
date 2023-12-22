@@ -12,6 +12,7 @@ import {
 import { parseCSVString } from "../common/utils/csv.utils";
 import { validateKeyword } from "../common/utils/validate-keyword.utils";
 import { randomUUID } from "crypto";
+import { GoogleScrapingScheduler } from "../services/google-scraping-scheduler.service";
 
 export class SearchResultsController implements IController {
   createRouter = () => {
@@ -160,27 +161,34 @@ export class SearchResultsController implements IController {
       }
 
       const keywords = await parseCSVString(rawContent);
-      const validKeywords = [] as string[];
+      const validKeywords = new Set<string>()
       for (let keyword of keywords) {
         keyword = keyword.trim();
 
+        if (validKeywords.has(keyword)) continue;
         if (!validateKeyword(keyword)) continue;
         const existingSearchResult =
           await SearchResultsRepository.findByKeyword(keyword);
         if (existingSearchResult) continue;
 
-        validKeywords.push(keyword);
+        validKeywords.add(keyword);
       }
 
-      const pendingSearchResults = validKeywords.map<SearchResultInsert>(
+      const pendingSearchResults = Array.from(validKeywords).map<searchResultSelect>(
         (keyword) => ({
           id: randomUUID(),
           keyword,
           pending: true,
+          adwordsCount: null,
+          linksCount: null,
+          resultsCount: null,
+          html: null,
         })
       );
-      if (pendingSearchResults.length) await SearchResultsRepository.insertSearchResults(pendingSearchResults);
+      if (pendingSearchResults.length)
+        await SearchResultsRepository.insertSearchResults(pendingSearchResults);
 
+      GoogleScrapingScheduler.addPendingSearchResults(pendingSearchResults);
       return res.sendStatus(202);
     } catch (e) {
       Logger.error(e);

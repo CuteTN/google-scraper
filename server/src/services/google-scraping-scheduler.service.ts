@@ -1,5 +1,5 @@
 import { setTimeout as delay } from "timers/promises";
-import { searchResultSelect } from "../models/search-results.model";
+import { SearchResultInsert, searchResultSelect } from "../models/search-results.model";
 import { SearchResultsRepository } from "../repositories/search-results.repo";
 import { randomInt } from "../common/utils/number.utils";
 import { GoogleScraper } from "./google-scraper.service";
@@ -7,12 +7,12 @@ import { Logger } from "../common/logger/logger";
 
 export class GoogleScrapingScheduler {
   private static readonly pendingSearchResultsQueue =
-    [] as searchResultSelect[];
+    [] as (searchResultSelect | SearchResultInsert)[];
   private static readonly MODULO_CYCLE_SIZE = 10007;
   private static readonly MODULO_CYCLE_BASE = 37;
   private static readonly UNIT_FAIL_STREAK_DELAY = 17250;
   private static readonly FAIL_STREAK_THRESHOLD = 16;
-  private static readonly RECHECK_DURATION = 30000;
+  private static readonly RECHECK_DURATION = 10000;
   private static readonly fibonacciSequence = [1, 1];
   private static failsStreak = 0;
   private static moduloCycle = 1;
