@@ -16,7 +16,13 @@ export class GoogleScrapingScheduler {
   private static readonly fibonacciSequence = [1, 1];
   private static failsStreak = 0;
   private static moduloCycle = 1;
-  private static isRunning = false;
+  private static _isRunning = false;
+  public static get isRunning() {
+    return this._isRunning;
+  }
+  private static set isRunning(value: boolean) {
+    this._isRunning = value;
+  }
 
   private static async loadAllPendingSearchResults() {
     const loadedPendingSearchResults =
