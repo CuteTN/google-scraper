@@ -2,7 +2,7 @@ create table if not exists app_user (
   id varchar(45) not null primary key,
   username varchar(100) not null,
   hashed_password varchar(100) not null
-)
+);
 
 create table if not exists app_search_result (
   id varchar(45) not null primary key,
@@ -12,4 +12,4 @@ create table if not exists app_search_result (
   results_count bigint,
   html varchar,
   pending boolean not null default true
-)
+);
